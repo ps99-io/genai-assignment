@@ -428,7 +428,7 @@ Proprietary - All rights reserved
 ## 🔗 Repository Links
 
 - **GitHub**: https://github.com/ps99-io/genai-assignment.git
-- **Main Branch**: https://github.com/ps99-io/Industrility-assignment/tree/main
+- **Main Branch**: https://github.com/ps99-io/genai-assignment/tree/main
 
 ## 📅 Project Timeline
 
