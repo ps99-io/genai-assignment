@@ -28,13 +28,25 @@ const parseDocument = async (dataBuffer) => {
 // Create XLSX file in buffer (checksheet output)
 const createChecksheetXLS = async (aiText) => {
   const wb = xlsx.utils.book_new();
-  const rows = [["Field", "Value"]];
-  aiText.split("\n").forEach((line) => {
-    const [field, ...rest] = line.split(":");
-    rows.push([field?.trim() || "", rest.join(":").trim() || ""]);
-  });
+
+  const lines = aiText
+    .split("\n")
+    .map((l) => l.trim())
+    .filter((l) => l.length > 0);
+
+  if (lines.length === 0) {
+    throw new Error("AI returned empty checksheet text");
+  }
+  const header = lines[0].split("|").map((col) => col.trim());
+
+  const dataRows = lines
+    .slice(1)
+    .map((line) => line.split("|").map((col) => col.trim()));
+
+  const rows = [header, ...dataRows];
   const ws = xlsx.utils.aoa_to_sheet(rows);
   xlsx.utils.book_append_sheet(wb, ws, "Checksheet");
+
   return xlsx.write(wb, { bookType: "xlsx", type: "buffer" });
 };
 

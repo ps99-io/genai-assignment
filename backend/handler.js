@@ -10,6 +10,10 @@ const {
 } = require("./src/utils/fileStreamHelpers.js");
 const { embedAndStoreTexts } = require("./src/services/embeddingService.js");
 const { queryLLM } = require("./src/services/llmService.js");
+const {
+  workInstructionPrompt,
+  checkSheetPrompt,
+} = require("./src/utils/prompt.js");
 const BUCKET = process.env.BUCKET_NAME;
 
 module.exports.getPresignedUrl = async (event) => {
@@ -111,10 +115,10 @@ module.exports.generate = async (event) => {
 // Compose prompt for use cases
 function buildPrompt(useCase, contextText) {
   if (useCase === "checksheet") {
-    return `generate a summary in XLS in a particular format - Checksheet. \n Checksheet is like a form in a row column manner that maintenance technician fills up. \n ${contextText}`;
+    return checkSheetPrompt(contextText);
   }
   if (useCase === "workinstruction") {
-    return `generate a summary in DOCX format and create work instructions based on the below text context: \n${contextText}`;
+    return workInstructionPrompt(contextText);
   }
   return contextText;
 }
